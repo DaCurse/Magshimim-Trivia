@@ -1,6 +1,8 @@
 #pragma once
+
 #include "IRequestHandler.h"
 #include "Request.h"
+#include "RequestHandlerFactory.h"
 
 class LoginRequestHandler : IRequestHandler
 {
@@ -12,8 +14,8 @@ class LoginRequestHandler : IRequestHandler
 		virtual const RequestResult handleRequest(Request r);
 		
 	private:
-		// m_loginManager;
-		// m_handlerFactory;
+		LoginManager m_loginManager;
+		RequestHandlerFactory m_handlerFactory;
 
 		RequestResult signup(Request r);
 		RequestResult login(Request r);
