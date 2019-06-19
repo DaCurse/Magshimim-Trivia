@@ -3,6 +3,8 @@
 #include <vector>
 #include <ctime>
 
+class IRequestHandler;
+
 typedef enum RequestID {
 
 } RequestID;

@@ -1,8 +1,7 @@
 #pragma once
 #include <list>
 #include <map>
-#include "LoggedUser.h"
-#include "Question.h"
+#include "DatabaseModels.h"
 
 class IDatabase
 {

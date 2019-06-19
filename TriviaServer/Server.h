@@ -1,8 +1,8 @@
 #pragma once
 
-#include "IDatabase.h";
-#include "Communicator.h";
-#include "RequestHandlerFactory.h";
+#include "IDatabase.h"
+#include "Communicator.h"
+#include "RequestHandlerFactory.h"
 
 class Server
 {

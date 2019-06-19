@@ -16,7 +16,7 @@ class Communicator
 
 	private:
 
-		std::map<SOCKET, IRequestHandler> m_clients;
+		std::map<SOCKET, IRequestHandler*> m_clients;
 		RequestHandlerFactory m_factory;
 
 		void startThreadForNewClient();
