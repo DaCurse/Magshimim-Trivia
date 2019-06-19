@@ -7,11 +7,11 @@ typedef enum STATUS_CODE {
 } STATUS_CODE;
 
 typedef struct LoginResponse {
-	unsigned int status;
+	STATUS_CODE status;
 } LoginResponse;
 
 typedef struct SignupResponse {
-	unsigned int status;
+	STATUS_CODE status;
 } SignupResponse;
 
 typedef struct ErrorResponse {

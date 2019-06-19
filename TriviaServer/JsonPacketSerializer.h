@@ -11,6 +11,8 @@ class JsonPacketSerializer
 {
 	public:
 		static std::vector<char> serializeResponse(ErrorResponse res);
+		static std::vector<char> serializeResponse(LoginResponse res);
+		static std::vector<char> serializeResponse(SignupResponse res);
 		
 
 	private:

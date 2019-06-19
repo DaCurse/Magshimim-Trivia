@@ -10,6 +10,16 @@ std::vector<char> JsonPacketSerializer::serializeResponse(ErrorResponse res)
 	return basePacket;
 }
 
+std::vector<char> JsonPacketSerializer::serializeResponse(LoginResponse res)
+{
+	return buildBasePacket(res.status, 0);
+}
+
+std::vector<char> JsonPacketSerializer::serializeResponse(SignupResponse res)
+{
+	return buildBasePacket(res.status, 0);
+}
+
 JsonPacketSerializer::JsonPacketSerializer()
 {
 }
