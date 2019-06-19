@@ -1,8 +1,9 @@
 #pragma once
-#include <iostream>
 
 typedef enum STATUS_CODE {
-
+	ERROR = 101,
+	LOGIN_SUCCESS = 102,
+	SIGNUP_SUCCESS = 103
 } STATUS_CODE;
 
 typedef struct LoginResponse {
