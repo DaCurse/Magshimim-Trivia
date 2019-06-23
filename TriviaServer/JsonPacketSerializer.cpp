@@ -2,34 +2,35 @@
 
 std::vector<char> JsonPacketSerializer::serializeResponse(ErrorResponse res)
 {
-	size_t messageSize = res.message.size() + 1; // Add 1 for null terminator
-	std::vector<char> basePacket = buildBasePacket(STATUS_CODE::ERROR, messageSize);
-	const char* messageBytes = res.message.c_str();
-	basePacket.insert(basePacket.end(), messageBytes, messageBytes + messageSize);
+	json j;
+	j["message"] = res.message;
 
-	return basePacket;
+	return buildPacket(ERROR, j.dump());
 }
 
 std::vector<char> JsonPacketSerializer::serializeResponse(LoginResponse res)
 {
-	return buildBasePacket(res.status, 0);
+	return buildPacket(res.status, "{}");
 }
 
 std::vector<char> JsonPacketSerializer::serializeResponse(SignupResponse res)
 {
-	return buildBasePacket(res.status, 0);
+	return buildPacket(res.status, "{}");
 }
 
 JsonPacketSerializer::JsonPacketSerializer()
 {
 }
 
-std::vector<char> JsonPacketSerializer::buildBasePacket(int code, size_t dataLength)
+std::vector<char> JsonPacketSerializer::buildPacket(int code, std::string data)
 {
 	char* codeBytes = CAST_TO_BYTES(code);
 	std::vector<char> packetBytes(codeBytes, codeBytes + sizeof(char)); // 1 byte length code
+	size_t dataLength = data.size() + 1; // Add 1 for null terminator
 	char* dataLengthBytes = CAST_TO_BYTES(dataLength);
 	packetBytes.insert(packetBytes.end(), dataLengthBytes, dataLengthBytes + sizeof(int)); // 4 byte length data length
+	const char* dataBytes = data.c_str();
+	packetBytes.insert(packetBytes.end(), dataBytes, dataBytes + dataLength);
 
 	return packetBytes;
 }

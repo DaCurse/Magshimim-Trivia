@@ -18,7 +18,7 @@ class JsonPacketSerializer
 	private:
 		JsonPacketSerializer();
 
-		static std::vector<char> buildBasePacket(int code, size_t dataLength);
+		static std::vector<char> buildPacket(int code, std::string data);
 		
 };
 
