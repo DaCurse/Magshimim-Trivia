@@ -1,12 +1,15 @@
 #include "JsonPacketDeserializer.h"
 
-
-
-JsonPacketDeserializer::JsonPacketDeserializer()
+LoginRequest JsonPacketDeserializer::deserializeLoginRequest(unsigned char* buffer)
 {
+	return LoginRequest();
 }
 
+SignupRequest JsonPacketDeserializer::deserializeSignupRequest(unsigned char* buffer)
+{
+	return SignupRequest();
+}
 
-JsonPacketDeserializer::~JsonPacketDeserializer()
+JsonPacketDeserializer::JsonPacketDeserializer()
 {
 }

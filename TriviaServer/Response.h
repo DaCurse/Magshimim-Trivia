@@ -1,17 +1,17 @@
 #pragma once
 
-typedef enum STATUS_CODE {
+typedef enum ResponseID {
 	ERROR = 201,
 	LOGIN_SUCCESS = 202,
 	SIGNUP_SUCCESS = 203
-} STATUS_CODE;
+} ResponseID;
 
 typedef struct LoginResponse {
-	STATUS_CODE status;
+	ResponseID status;
 } LoginResponse;
 
 typedef struct SignupResponse {
-	STATUS_CODE status;
+	ResponseID status;
 } SignupResponse;
 
 typedef struct ErrorResponse {

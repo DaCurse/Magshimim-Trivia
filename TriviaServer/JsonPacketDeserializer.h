@@ -5,13 +5,10 @@
 class JsonPacketDeserializer
 {
 	public:
-		JsonPacketDeserializer();
-		~JsonPacketDeserializer();
-
-		LoginRequest deserializeLoginRequest(std::vector<char> buffer);
-		LoginRequest deserializeSignupRequest(std::vector<char> buffer);
+		static LoginRequest deserializeLoginRequest(unsigned char* buffer);
+		static SignupRequest deserializeSignupRequest(unsigned char* buffer);
 
 	private:
-
+		JsonPacketDeserializer();
 };
 

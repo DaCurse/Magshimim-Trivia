@@ -24,10 +24,10 @@ typedef struct SignupRequest {
 typedef struct Request {
 	RequestID id;
 	time_t rt;
-	std::vector<char> buffer;
+	std::vector<unsigned char> buffer;
 } Request;
 
 typedef struct RequestResult {
-	std::vector<char> response;
+	std::vector<unsigned char> response;
 	IRequestHandler* newHandler;
 } RequestResult;
