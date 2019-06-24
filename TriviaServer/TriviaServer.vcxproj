@@ -118,6 +118,7 @@
     <ClCompile Include="Communicator.cpp" />
     <ClCompile Include="IDatabase.cpp" />
     <ClCompile Include="IRequestHandler.cpp" />
+    <ClCompile Include="JsonPacketDeserializer.cpp" />
     <ClCompile Include="JsonPacketSerializer.cpp" />
     <ClCompile Include="LoginManager.cpp" />
     <ClCompile Include="LoginRequestHandler.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="IDatabase.h" />
     <ClInclude Include="IRequestHandler.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="JsonPacketDeserializer.h" />
     <ClInclude Include="JsonPacketSerializer.h" />
     <ClInclude Include="LoginManager.h" />
     <ClInclude Include="LoginRequestHandler.h" />

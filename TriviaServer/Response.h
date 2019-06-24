@@ -1,9 +1,9 @@
 #pragma once
 
 typedef enum STATUS_CODE {
-	ERROR = 101,
-	LOGIN_SUCCESS = 102,
-	SIGNUP_SUCCESS = 103
+	ERROR = 201,
+	LOGIN_SUCCESS = 202,
+	SIGNUP_SUCCESS = 203
 } STATUS_CODE;
 
 typedef struct LoginResponse {

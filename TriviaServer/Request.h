@@ -6,7 +6,8 @@
 class IRequestHandler;
 
 typedef enum RequestID {
-
+	LOGIN_REQUEST = 101,
+	SIGNUP_REQUEST = 102,
 } RequestID;
 
 typedef struct LoginRequest {

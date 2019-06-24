@@ -21,4 +21,3 @@ class LoginRequestHandler : IRequestHandler
 		RequestResult login(Request r);
 
 };
-
