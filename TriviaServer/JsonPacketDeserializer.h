@@ -1,6 +1,10 @@
 #pragma once
 
+#include <exception>  
 #include "Request.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 class JsonPacketDeserializer
 {
@@ -10,5 +14,7 @@ class JsonPacketDeserializer
 
 	private:
 		JsonPacketDeserializer();
+
+		static json extractData(unsigned char* buffer);
 };
 
