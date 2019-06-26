@@ -132,7 +132,7 @@ namespace nlohmann
 
 		@internal
 		@note To have nothrow-copy-constructible exceptions, we internally use
-			  `std::runtime_error` which can cope with arbitrary-length error messages.
+			  `std::exception` which can cope with arbitrary-length error messages.
 			  Intermediate strings are built with static functions and then passed to
 			  the actual constructor.
 		@endinternal
@@ -164,7 +164,7 @@ namespace nlohmann
 
 		private:
 			/// an exception object as storage for error messages
-			std::runtime_error m;
+			std::exception m;
 		};
 
 		/*!

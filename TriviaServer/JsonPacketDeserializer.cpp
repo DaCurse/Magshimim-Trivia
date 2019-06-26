@@ -6,7 +6,7 @@ LoginRequest JsonPacketDeserializer::deserializeLoginRequest(unsigned char* buff
 	
 	if (code != LOGIN_REQUEST)
 	{
-		throw std::exception("Cannot deserialize login request: Invalid request ID: " + code);
+		throw std::runtime_error("Cannot deserialize login request: Invalid request ID: " + code);
 	}
 
 	json jsonData = extractData(buffer);
@@ -21,7 +21,7 @@ SignupRequest JsonPacketDeserializer::deserializeSignupRequest(unsigned char* bu
 
 	if (code != SIGNUP_REQUEST)
 	{
-		throw std::exception("Cannot deserialize signup request: Invalid request ID: " + code);
+		throw std::runtime_error("Cannot deserialize signup request: Invalid request ID: " + code);
 	}
 
 	json jsonData = extractData(buffer);

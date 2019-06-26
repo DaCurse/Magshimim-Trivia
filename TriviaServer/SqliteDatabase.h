@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <sstream>
 #include "IDatabase.h"
 #include "Config.h"
 
@@ -18,5 +19,7 @@ class SqliteDatabase : public IDatabase
 
 	private:
 		sqlite3* m_db;
+
+		void sqlInsert(std::string table, std::vector<std::string> columns, std::vector<std::string> values); // Values need to get converted to a string beforehand
 };
 
