@@ -4,7 +4,6 @@
 #include <map>
 #include "DatabaseModels.h"
 #include "LoggedUser.h"
-#include "sqlite3.h"
 
 class IDatabase
 {

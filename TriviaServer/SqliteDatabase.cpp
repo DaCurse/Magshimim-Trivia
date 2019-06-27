@@ -1,5 +1,7 @@
 #include "SqliteDatabase.h"
 
+std::vector<std::map<std::string, std::string>> SqliteDatabase::fetchTmp = {};
+
 SqliteDatabase::SqliteDatabase()
 {
 	std::string dbFile = Config::getConfig()["db_path"];
@@ -66,7 +68,7 @@ void SqliteDatabase::sqlInsert(std::string table, std::vector<std::string> colum
 
 }
 
-void SqliteDatabase::sqlFetch(std::string table, std::vector<std::string> columns, std::string whereCondition, std::string orderBy, std::string groupBy, int limit, std::string extra)
+std::vector<std::map<std::string, std::string>> SqliteDatabase::sqlFetch(std::string table, std::vector<std::string> columns, std::string whereCondition, std::string orderBy, std::string groupBy, int limit, std::string extra)
 {
 	std::stringstream statementStream;
 	statementStream << "SELECT ";
@@ -104,29 +106,28 @@ void SqliteDatabase::sqlFetch(std::string table, std::vector<std::string> column
 	statementStream << ";";	
 
 	char* errMessage = nullptr;
-
-	std::function<int(void * data, int argc, char ** argv, char ** colName)> callback = [&](void * data, int argc, char ** argv, char ** colName) -> int {
-		
-	};
-
-	int res = sqlite3_exec(m_db, statementStream.str().c_str(), callback, nullptr, &errMessage);
+	
+	int res = sqlite3_exec(m_db, statementStream.str().c_str(), sqliteCallback, nullptr, &errMessage);
 
 	if (res != SQLITE_OK)
 	{
 		throw std::runtime_error("Failed to fetch from database: '" + std::string(errMessage) + "'");
 	}
+
+	std::vector<std::map<std::string, std::string>> rows(SqliteDatabase::fetchTmp);
+	SqliteDatabase::fetchTmp.clear();
+
+	return rows;
 }
 
-int(*sqliteCallback(SqliteDatabase &db))(void * data, int argc, char ** argv, char ** colName)
+int SqliteDatabase::sqliteCallback(void * data, int argc, char ** argv, char ** colName)
 {
-	return [&db](void * data, int argc, char ** argv, char ** colName) -> int
+	std::map<std::string, std::string> row;
+	for (int i = 0; i < argc; i++)
 	{
-		std::map<std::string, std::string> row;
-		for (int i = 0; i < argc; i++)
-		{
-			row.insert(colName[i], argv[i]);
-		}
-		db.m_fetchTmp.push_back(row);
-		return 0;
-	};
+		row.insert(std::make_pair(colName[i], argv[i]));
+	}
+	SqliteDatabase::fetchTmp.push_back(row);
+	return 0;
 }
+

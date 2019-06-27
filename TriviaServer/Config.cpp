@@ -12,6 +12,10 @@ void Config::loadConfig()
 
 json Config::getConfig()
 {
+	if (m_config.empty())
+	{
+		throw std::runtime_error("Failed to load config: config was not loaded yet");
+	}
 	return m_config;
 }
 
