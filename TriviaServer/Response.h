@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 typedef enum ResponseID {
 	ERROR = 201,
 	LOGIN_SUCCESS = 202,

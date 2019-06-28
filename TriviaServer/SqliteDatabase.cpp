@@ -28,7 +28,7 @@ const std::map<LoggedUser, int> SqliteDatabase::getHighscores()
 
 const bool SqliteDatabase::doesUserExist(std::string username)
 {
-	return false;
+	return sqlFetch("users", { "*" }, "username = '" + username + "'").size() > 0;
 }
 
 const std::list<Question> SqliteDatabase::getQuestions(int id)
