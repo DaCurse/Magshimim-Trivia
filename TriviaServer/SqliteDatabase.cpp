@@ -33,7 +33,23 @@ const bool SqliteDatabase::doesUserExist(std::string username)
 
 const std::list<Question> SqliteDatabase::getQuestions(int id)
 {
-	return std::list<Question>();
+	std::vector<std::map<std::string, std::string>> questionsVector = sqlFetch("questions", { "*" }, "1");
+	std::list<Question> questions;
+
+	for (auto it = questionsVector.begin(); it != questionsVector.end(); ++it)
+	{
+		questions.push_back({
+			std::stoi(it->find("question_id")->second),
+			it->find("question")->second,
+			it->find("correct_ans")->second,
+			it->find("ans2")->second,
+			it->find("ans3")->second,
+			it->find("ans4")->second,
+		});
+	}
+
+	return questions;
+
 }
 
 const LoggedUser SqliteDatabase::loginUser(std::string username, std::string password)
