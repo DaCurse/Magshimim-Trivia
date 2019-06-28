@@ -2,7 +2,7 @@
 
 
 
-LoggedUser::LoggedUser()
+LoggedUser::LoggedUser(std::string username) : m_username(username)
 {
 }
 

@@ -54,7 +54,16 @@ const std::list<Question> SqliteDatabase::getQuestions(int id)
 
 const LoggedUser SqliteDatabase::loginUser(std::string username, std::string password)
 {
-	return LoggedUser();
+	if (doesUserExist(username))
+	{
+		throw std::runtime_error("Failed to log in user: user doesn't exist");
+	}
+	std::vector <std::map<std::string, std::string>> user = sqlFetch("users", { "username" }, "username = '" + username + "' AND password = '" + password + "'");
+	if (user.size() < 1)
+	{
+		throw std::runtime_error("Failed to log in user: invalid password");
+	}
+	return LoggedUser(user[0].begin()->second);
 }
 
 const void SqliteDatabase::signupUser(std::string username, std::string password, std::string email)
@@ -146,4 +155,3 @@ int SqliteDatabase::sqliteCallback(void * data, int argc, char ** argv, char ** 
 	SqliteDatabase::fetchTmp.push_back(row);
 	return 0;
 }
-
