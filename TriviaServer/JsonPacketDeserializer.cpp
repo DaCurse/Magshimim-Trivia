@@ -1,39 +1,18 @@
 #include "JsonPacketDeserializer.h"
 
-LoginRequest JsonPacketDeserializer::deserializeLoginRequest(unsigned char* buffer)
+LoginRequest JsonPacketDeserializer::deserializeLoginRequest(char* buffer, int len)
 {
-	int code = static_cast<int>(buffer[0]);
-	
-	if (code != LOGIN_REQUEST)
-	{
-		throw std::runtime_error("Cannot deserialize login request: Invalid request ID: " + code);
-	}
-
-	json jsonData = extractData(buffer);
-
+	std::string data(buffer, len - 1);
+	json jsonData = json::parse(data);
 	return LoginRequest({jsonData["username"], jsonData["password"]});
 
 }
 
-SignupRequest JsonPacketDeserializer::deserializeSignupRequest(unsigned char* buffer)
+SignupRequest JsonPacketDeserializer::deserializeSignupRequest(char* buffer, int len)
 {
-	int code = static_cast<int>(buffer[0]);
-
-	if (code != SIGNUP_REQUEST)
-	{
-		throw std::runtime_error("Cannot deserialize signup request: Invalid request ID: " + code);
-	}
-
-	json jsonData = extractData(buffer);
-
+	std::string data(buffer, len - 1);
+	json jsonData = json::parse(data);
 	return SignupRequest({jsonData["username"], jsonData["password"], jsonData["email"]});
-}
-
-json JsonPacketDeserializer::extractData(unsigned char * buffer)
-{
-	int dataLength = buffer[1] << 24 | buffer[2] << 16 | buffer[3] << 8 | buffer[4];
-	std::string data(reinterpret_cast<char*>(&buffer[5]), dataLength - 1);
-	return json::parse(data);
 }
 
 JsonPacketDeserializer::JsonPacketDeserializer()

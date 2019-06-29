@@ -1,6 +1,6 @@
 #pragma once
 
-#include <exception>  
+#include <stdexcept>  
 #include "Request.h"
 #include "json.hpp"
 
@@ -9,12 +9,11 @@ using json = nlohmann::json;
 class JsonPacketDeserializer
 {
 	public:
-		static LoginRequest deserializeLoginRequest(unsigned char* buffer);
-		static SignupRequest deserializeSignupRequest(unsigned char* buffer);
+		static LoginRequest deserializeLoginRequest(char* buffer, int len);
+		static SignupRequest deserializeSignupRequest(char* buffer, int len);
 
 	private:
 		JsonPacketDeserializer();
 
-		static json extractData(unsigned char* buffer);
 };
 

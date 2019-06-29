@@ -112,7 +112,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.json" />
-    <None Include="triviadb.sqlite" />
+    <None Include="config.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="triviadb.sqlite">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
