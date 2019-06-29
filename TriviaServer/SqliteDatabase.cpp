@@ -33,7 +33,7 @@ const bool SqliteDatabase::doesUserExist(std::string username)
 
 const std::list<Question> SqliteDatabase::getQuestions(int id)
 {
-	std::vector<std::map<std::string, std::string>> questionsVector = sqlFetch("questions", { "*" }, "1");
+	std::vector<std::map<std::string, std::string>> questionsVector = sqlFetch("questions", { "*" }, "game_id = " + id);
 	std::list<Question> questions;
 
 	for (auto it = questionsVector.begin(); it != questionsVector.end(); ++it)
@@ -54,20 +54,20 @@ const std::list<Question> SqliteDatabase::getQuestions(int id)
 
 const LoggedUser SqliteDatabase::loginUser(std::string username, std::string password)
 {
-	if (doesUserExist(username))
-	{
-		throw std::runtime_error("Failed to log in user: user doesn't exist");
-	}
 	std::vector <std::map<std::string, std::string>> user = sqlFetch("users", { "username" }, "username = '" + username + "' AND password = '" + password + "'");
 	if (user.size() < 1)
 	{
-		throw std::runtime_error("Failed to log in user: invalid password");
+		throw std::runtime_error("Failed to log in user: invalid password or username");
 	}
 	return LoggedUser(user[0].begin()->second);
 }
 
 const void SqliteDatabase::signupUser(std::string username, std::string password, std::string email)
 {
+	if (doesUserExist(username))
+	{
+		throw std::runtime_error("Failed to sign up user: Username already exists");
+	}
 	sqlInsert("users", { "username", "password", "email" }, { username, password, email });
 }
 
