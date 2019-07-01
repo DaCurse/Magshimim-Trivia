@@ -16,7 +16,7 @@ class LoginManager
 
 
 	private:
-		IDatabase* m_database;
+		IDatabase& m_database;
 		std::vector<LoggedUser> m_loggedUsers;
 
 };

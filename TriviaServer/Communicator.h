@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include "IRequestHandler.h"
 #include "RequestHandlerFactory.h"
+#include "JsonPacketSerializer.h"
 #include "Config.h"
 
 #pragma comment(lib, "ws2_32.lib")
@@ -23,7 +24,7 @@ class Communicator
 
 	private:
 		SOCKET m_sock;
-		std::map<SOCKET, IRequestHandler*> m_clients;
+		std::map<SOCKET, IRequestHandler&> m_clients;
 		RequestHandlerFactory m_factory;
 		std::mutex m_clientsMu;
 

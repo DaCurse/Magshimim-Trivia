@@ -5,7 +5,7 @@ std::vector<char> JsonPacketSerializer::serializeResponse(ErrorResponse res)
 	json jsonData;
 	jsonData["message"] = res.message;
 
-	return buildPacket(ERROR, jsonData.dump());
+	return buildPacket(REQUEST_ERROR, jsonData.dump());
 }
 
 std::vector<char> JsonPacketSerializer::serializeResponse(LoginResponse res)

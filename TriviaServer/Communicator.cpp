@@ -54,7 +54,7 @@ void Communicator::bindAndListen()
 			throw std::runtime_error("Invalid connection");
 		}
 
-		m_clients[clientSock] = m_factory.createLoginRequestHandler();
+		m_clients[clientSock] = &m_factory.createLoginRequestHandler();
 		startThreadForNewClient(clientSock);
 
 	}
@@ -77,16 +77,31 @@ void Communicator::clientHandler(SOCKET client)
 		int dataLength = lengthBuff[0] << 24 | lengthBuff[1] << 16 | lengthBuff[2] << 8 | lengthBuff[3];
 		char* dataBuff = new char(dataLength);
 		recv(client, dataBuff, dataLength, 0);
+
 		std::vector<char> dataVec(dataBuff, dataBuff + dataLength);
 		Request r = {
 			code,
 			std::time(nullptr),
 			dataVec
 		};
-		std::lock_guard<std::mutex> clientLocker(m_clientsMu);
-		if (m_clients.find(client)->second->isRequestRelevant(r))
-		{
 
+		std::unique_lock<std::mutex> clientLocker(m_clientsMu);
+		IRequestHandler& handler = m_clients.find(client)->second;
+		clientLocker.unlock();
+
+		if (handler.isRequestRelevant(r))
+		{
+			RequestResult res = handler.handleRequest(r);
+			clientLocker.lock();
+			m_clients.find(client)->second = res.newHandler;
+			clientLocker.unlock();
+			send(client, &res.response[0], res.response.size(), 0);
+		}
+		else
+		{
+			ErrorResponse res = { "Invalid request type" };
+			std::vector<char> packet = JsonPacketSerializer::serializeResponse(res);
+			send(client, &packet[0], packet.size(), 0);
 		}
 	}
 }

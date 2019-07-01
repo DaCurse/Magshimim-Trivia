@@ -3,7 +3,7 @@
 #include <string>
 
 typedef enum ResponseID {
-	ERROR = 201,
+	REQUEST_ERROR = 201,
 	LOGIN_SUCCESS = 202,
 	SIGNUP_SUCCESS = 203
 } ResponseID;
