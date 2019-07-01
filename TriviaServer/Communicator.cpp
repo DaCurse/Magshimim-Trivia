@@ -30,7 +30,7 @@ Communicator::~Communicator()
 void Communicator::bindAndListen()
 {
 	SOCKADDR_IN sa;
-	sa.sin_port = Config::getConfig()["port"];
+	sa.sin_port = htons(Config::getConfig()["port"]); // 8080
 	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = INADDR_ANY;
 
@@ -44,14 +44,17 @@ void Communicator::bindAndListen()
 		throw std::runtime_error("Failed to start listening");
 	}
 
+	
 	while (true)
 	{
-		SOCKET clientSock = ::accept(m_sock, NULL, NULL);
+		SOCKET clientSock = accept(m_sock, NULL, NULL);
+		
 		if(clientSock == INVALID_SOCKET)
 		{ 
 			throw std::runtime_error("Invalid connection");
 		}
 
+		m_clients[clientSock] = m_factory.createLoginRequestHandler();
 		startThreadForNewClient(clientSock);
 
 	}
@@ -62,17 +65,34 @@ void Communicator::handleRequests()
 {
 }
 
-void Communicator::startThreadForNewClient(SOCKET clientSock)
+void Communicator::clientHandler(SOCKET client)
 {
-	//std::thread clientThread(clientHandler, *this, clientSock);
-	//clientThread.detach();
+	while (true)
+	{
+		char codeBuff[1];
+		recv(client, codeBuff, 1, 0);
+		int code = static_cast<int>(static_cast<unsigned char>(codeBuff[0]));
+		char lengthBuff[4];
+		recv(client, lengthBuff, 4, 0);
+		int dataLength = lengthBuff[0] << 24 | lengthBuff[1] << 16 | lengthBuff[2] << 8 | lengthBuff[3];
+		char* dataBuff = new char(dataLength);
+		recv(client, dataBuff, dataLength, 0);
+		std::vector<char> dataVec(dataBuff, dataBuff + dataLength);
+		Request r = {
+			code,
+			std::time(nullptr),
+			dataVec
+		};
+		std::lock_guard<std::mutex> clientLocker(m_clientsMu);
+		if (m_clients.find(client)->second->isRequestRelevant(r))
+		{
+
+		}
+	}
 }
 
-void clientHandler(Communicator& comm, SOCKET client)
+void Communicator::startThreadForNewClient(SOCKET clientSock)
 {
-	std::unique_lock<std::mutex> sockLocker(comm.m_sockMutex);
-	char codeBuff[1];
-	recv(client, codeBuff, 1, 0);
-
-	sockLocker.unlock();
+	std::thread clientThread(&Communicator::clientHandler, this, clientSock);	
+	clientThread.join();
 }

@@ -23,7 +23,7 @@ typedef struct SignupRequest {
 } SignupRequest;
 
 typedef struct Request {
-	RequestID id;
+	int id;
 	time_t rt;
 	std::vector<char> buffer;
 } Request;

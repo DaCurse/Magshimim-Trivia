@@ -25,10 +25,10 @@ class Communicator
 		SOCKET m_sock;
 		std::map<SOCKET, IRequestHandler*> m_clients;
 		RequestHandlerFactory m_factory;
-		std::mutex m_sockMutex;
+		std::mutex m_clientsMu;
 
+		void clientHandler(SOCKET client);
 		void startThreadForNewClient(SOCKET clientSock);
-		friend void clientHandler(Communicator& comm, SOCKET client);
 
 };
 

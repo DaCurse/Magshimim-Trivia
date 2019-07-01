@@ -13,7 +13,7 @@ LoginRequestHandler::~LoginRequestHandler()
 
 const bool LoginRequestHandler::isRequestRelevant(Request r)
 {
-	return false;
+	return r.id >= LOGIN_REQUEST && r.id <= SIGNUP_REQUEST;
 }
 
 const RequestResult LoginRequestHandler::handleRequest(Request r)
