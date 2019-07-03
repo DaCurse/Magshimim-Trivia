@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "stdafx.h"
 
 typedef struct Question {
 	int question_id;

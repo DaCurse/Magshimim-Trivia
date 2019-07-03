@@ -1,8 +1,6 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <ctime>
+#include "stdafx.h"
 
 class IRequestHandler;
 
@@ -30,5 +28,5 @@ typedef struct Request {
 
 typedef struct RequestResult {
 	std::vector<char> response;
-	IRequestHandler& newHandler;
+	IRequestHandler* newHandler;
 } RequestResult;

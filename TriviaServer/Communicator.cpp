@@ -30,7 +30,7 @@ Communicator::~Communicator()
 void Communicator::bindAndListen()
 {
 	SOCKADDR_IN sa;
-	sa.sin_port = htons(Config::getConfig()["port"]); // 8080
+	sa.sin_port = htons(Config::getConfig()["port"]);
 	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = INADDR_ANY;
 
@@ -54,7 +54,9 @@ void Communicator::bindAndListen()
 			throw std::runtime_error("Invalid connection");
 		}
 
-		m_clients[clientSock] = &m_factory.createLoginRequestHandler();
+		std::cout << "Client connected" << std::endl;
+
+		m_clients[clientSock] = (IRequestHandler*)m_factory.createLoginRequestHandler();
 		startThreadForNewClient(clientSock);
 
 	}
@@ -67,47 +69,65 @@ void Communicator::handleRequests()
 
 void Communicator::clientHandler(SOCKET client)
 {
-	while (true)
+	try
 	{
-		char codeBuff[1];
-		recv(client, codeBuff, 1, 0);
-		int code = static_cast<int>(static_cast<unsigned char>(codeBuff[0]));
-		char lengthBuff[4];
-		recv(client, lengthBuff, 4, 0);
-		int dataLength = lengthBuff[0] << 24 | lengthBuff[1] << 16 | lengthBuff[2] << 8 | lengthBuff[3];
-		char* dataBuff = new char(dataLength);
-		recv(client, dataBuff, dataLength, 0);
-
-		std::vector<char> dataVec(dataBuff, dataBuff + dataLength);
-		Request r = {
-			code,
-			std::time(nullptr),
-			dataVec
-		};
-
-		std::unique_lock<std::mutex> clientLocker(m_clientsMu);
-		IRequestHandler& handler = m_clients.find(client)->second;
-		clientLocker.unlock();
-
-		if (handler.isRequestRelevant(r))
+		while (true)
 		{
-			RequestResult res = handler.handleRequest(r);
-			clientLocker.lock();
-			m_clients.find(client)->second = res.newHandler;
-			clientLocker.unlock();
-			send(client, &res.response[0], res.response.size(), 0);
+			char codeBuff[1];
+			if (recv(client, codeBuff, 1, 0) == SOCKET_ERROR)
+			{
+				break;
+			}
+
+			int code = static_cast<int>(static_cast<unsigned char>(codeBuff[0]));
+			char lengthBuff[4];
+			recv(client, lengthBuff, 4, 0);
+			int dataLength = lengthBuff[0] << 24 | lengthBuff[1] << 16 | lengthBuff[2] << 8 | lengthBuff[3];
+			char* dataBuff = new char[dataLength];
+			recv(client, dataBuff, dataLength, 0);
+
+			dataBuff[dataLength - 1] = 0;
+			std::vector<char> dataVec(dataBuff, dataBuff + dataLength);
+			delete[] dataBuff;
+
+			Request r = {
+				code,
+				std::time(nullptr),
+				dataVec
+			};
+
+			IRequestHandler* handler = nullptr;
+			{
+				std::lock_guard<std::mutex> locker(m_clientsMu);
+				handler = m_clients.find(client)->second;
+			}
+
+			if (handler->isRequestRelevant(r))
+			{
+				RequestResult res = handler->handleRequest(r);
+				{
+					std::lock_guard<std::mutex> locker(m_clientsMu);
+					delete[] m_clients.find(client)->second;
+					m_clients.find(client)->second = res.newHandler;
+				}
+				send(client, res.response.data(), res.response.size(), 0);
+			}
+			else
+			{
+				ErrorResponse res = { "Invalid request type" };
+				std::vector<char> packet = JsonPacketSerializer::serializeResponse(res);
+				send(client, packet.data(), packet.size(), 0);
+			}
 		}
-		else
-		{
-			ErrorResponse res = { "Invalid request type" };
-			std::vector<char> packet = JsonPacketSerializer::serializeResponse(res);
-			send(client, &packet[0], packet.size(), 0);
-		}
+	}
+	catch (...)
+	{
+		closesocket(client);
 	}
 }
 
 void Communicator::startThreadForNewClient(SOCKET clientSock)
 {
 	std::thread clientThread(&Communicator::clientHandler, this, clientSock);	
-	clientThread.join();
+	clientThread.detach();
 }

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <sstream>
+#include "stdafx.h"
 #include "IDatabase.h"
+#include "LoggedUser.h"
+#include "DatabaseModels.h"
 #include "Config.h"
-#include "sqlite3.h"
 
 class SqliteDatabase : public IDatabase
 {

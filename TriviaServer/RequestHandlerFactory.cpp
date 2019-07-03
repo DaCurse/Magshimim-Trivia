@@ -11,7 +11,7 @@ RequestHandlerFactory::~RequestHandlerFactory()
 {
 }
 
-LoginRequestHandler RequestHandlerFactory::createLoginRequestHandler()
+LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
-	return LoginRequestHandler();
+	return new LoginRequestHandler();
 }

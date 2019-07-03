@@ -1,7 +1,6 @@
 #pragma once
 
-#include <list>
-#include <map>
+#include "stdafx.h"
 #include "DatabaseModels.h"
 #include "LoggedUser.h"
 

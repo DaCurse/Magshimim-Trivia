@@ -1,10 +1,7 @@
 #pragma once
 
-#include <vector>
+#include "stdafx.h"
 #include "Response.h"
-#include "json.hpp"
-
-using json = nlohmann::json;
 
 class JsonPacketSerializer
 {

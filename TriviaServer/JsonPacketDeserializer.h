@@ -1,10 +1,7 @@
 #pragma once
 
-#include <stdexcept>  
+#include "stdafx.h"
 #include "Request.h"
-#include "json.hpp"
-
-using json = nlohmann::json;
 
 class JsonPacketDeserializer
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
+#include "stdafx.h"
 #include "IDatabase.h"
-#include "DatabaseModels.h"
+#include "LoggedUser.h"
 
 class LoginManager
 {
@@ -16,7 +16,7 @@ class LoginManager
 
 
 	private:
-		IDatabase& m_database;
+		IDatabase* m_database;
 		std::vector<LoggedUser> m_loggedUsers;
 
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdafx.h"
 #include "LoginManager.h"
 
 class LoginRequestHandler;
@@ -10,7 +11,7 @@ class RequestHandlerFactory
 		RequestHandlerFactory();
 		~RequestHandlerFactory();
 
-		LoginRequestHandler createLoginRequestHandler();
+		LoginRequestHandler* createLoginRequestHandler();
 
 	private:
 		LoginManager m_loginManager;

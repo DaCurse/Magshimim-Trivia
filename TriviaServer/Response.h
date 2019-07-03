@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "stdafx.h"
 
 typedef enum ResponseID {
 	REQUEST_ERROR = 201,

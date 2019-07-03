@@ -84,6 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -152,6 +153,7 @@
     <ClInclude Include="Server.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="SqliteDatabase.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

@@ -1,9 +1,6 @@
 #pragma once
 
-#include <fstream>
-#include "json.hpp"
-
-using json = nlohmann::json;
+#include "stdafx.h"
 
 class Config
 {

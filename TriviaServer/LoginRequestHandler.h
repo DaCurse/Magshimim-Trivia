@@ -1,10 +1,15 @@
 #pragma once
 
+#include "stdafx.h"
 #include "IRequestHandler.h"
-#include "RequestHandlerFactory.h"
+#include "Request.h"
+#include "Response.h"
+#include "JsonPacketSerializer.h"
 #include "LoginManager.h"
 
-class LoginRequestHandler : IRequestHandler
+class RequestHandlerFactory;
+
+class LoginRequestHandler : public IRequestHandler
 {
 	public:
 		LoginRequestHandler();
@@ -15,7 +20,7 @@ class LoginRequestHandler : IRequestHandler
 		
 	private:
 		LoginManager m_loginManager;
-		RequestHandlerFactory m_handlerFactory;
+		RequestHandlerFactory* m_handlerFactory;
 
 		RequestResult signup(Request r);
 		RequestResult login(Request r);

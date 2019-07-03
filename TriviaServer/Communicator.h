@@ -1,17 +1,11 @@
 #pragma once
 
-#include <WinSock2.h>
-#include <Windows.h>
-#include <map>
-#include <thread>
-#include <mutex>
-#include <stdexcept>
-#include "IRequestHandler.h"
+#include "stdafx.h"
 #include "RequestHandlerFactory.h"
+#include "IRequestHandler.h"
+#include "Response.h"
 #include "JsonPacketSerializer.h"
 #include "Config.h"
-
-#pragma comment(lib, "ws2_32.lib")
 
 class Communicator
 {
@@ -24,7 +18,7 @@ class Communicator
 
 	private:
 		SOCKET m_sock;
-		std::map<SOCKET, IRequestHandler&> m_clients;
+		std::map<SOCKET, IRequestHandler*> m_clients;
 		RequestHandlerFactory m_factory;
 		std::mutex m_clientsMu;
 

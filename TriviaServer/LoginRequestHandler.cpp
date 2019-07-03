@@ -2,7 +2,7 @@
 #include "RequestHandlerFactory.h"
 
 
-LoginRequestHandler::LoginRequestHandler()
+LoginRequestHandler::LoginRequestHandler() : m_handlerFactory(nullptr)
 {
 }
 
@@ -18,9 +18,7 @@ const bool LoginRequestHandler::isRequestRelevant(Request r)
 
 const RequestResult LoginRequestHandler::handleRequest(Request r)
 {
-	return (RequestResult) {
-
-	};
+	return RequestResult();
 }
 
 RequestResult LoginRequestHandler::signup(Request r)
