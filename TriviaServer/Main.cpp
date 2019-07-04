@@ -9,6 +9,7 @@ int main()
 		Config::loadConfig();
 		SqliteDatabase* db = new SqliteDatabase();
 		Server serv(db);
+		std::cout << "Starting server..." << std::endl;
 		serv.run();
 	}
 	catch (std::exception& e)
