@@ -8,6 +8,8 @@ void Config::loadConfig()
 	std::string data((std::istreambuf_iterator<char>(configFile)), std::istreambuf_iterator<char>());
 
 	m_config = json::parse(data);
+
+	std::cout << "Server config loaded" << std::endl;
 }
 
 json Config::getConfig()

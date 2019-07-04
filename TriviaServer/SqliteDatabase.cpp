@@ -13,6 +13,8 @@ SqliteDatabase::SqliteDatabase()
 		throw std::runtime_error("Failed to open database");
 	}
 
+	std::cout << "Connected to database" << std::endl;
+
 }
 
 SqliteDatabase::~SqliteDatabase()
