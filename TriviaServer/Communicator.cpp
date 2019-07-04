@@ -17,7 +17,6 @@ Communicator::Communicator(RequestHandlerFactory factory) : m_factory(factory)
 }
 
 
-
 Communicator::~Communicator()
 {
 	try
@@ -85,14 +84,18 @@ void Communicator::clientHandler(SOCKET client)
 			{
 				break;
 			}
-
 			int code = static_cast<int>(static_cast<unsigned char>(codeBuff[0]));
+
 			char lengthBuff[4];
 			recv(client, lengthBuff, 4, 0);
-			int dataLength = lengthBuff[0] << 24 | lengthBuff[1] << 16 | lengthBuff[2] << 8 | lengthBuff[3];
+			int dataLength = lengthBuff[3];
+			for (int i = 2; i >= 0; i--)
+			{
+				dataLength |= lengthBuff[i] << ((3 - i) * 8);
+			}
+
 			char* dataBuff = new char[dataLength];
 			recv(client, dataBuff, dataLength, 0);
-
 			dataBuff[dataLength - 1] = 0;
 			std::vector<char> dataVec(dataBuff, dataBuff + dataLength);
 			delete[] dataBuff;
@@ -107,6 +110,7 @@ void Communicator::clientHandler(SOCKET client)
 			{
 				std::lock_guard<std::mutex> locker(m_clientsMu);
 				handler = m_clients.find(client)->second;
+				if (handler == nullptr) break;
 			}
 
 			if (handler->isRequestRelevant(r))

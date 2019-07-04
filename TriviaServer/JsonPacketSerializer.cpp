@@ -2,20 +2,26 @@
 
 std::vector<char> JsonPacketSerializer::serializeResponse(ErrorResponse res)
 {
-	json jsonData;
-	jsonData["message"] = res.message;
-
+	json jsonData = {
+		{"message", res.message}
+	};
 	return buildPacket(REQUEST_ERROR, jsonData.dump());
 }
 
 std::vector<char> JsonPacketSerializer::serializeResponse(LoginResponse res)
 {
-	return buildPacket(res.status, "{}");
+	json jsonData = {
+		{"status", res.status}
+	};
+	return buildPacket(res.status, jsonData.dump());
 }
 
 std::vector<char> JsonPacketSerializer::serializeResponse(SignupResponse res)
 {
-	return buildPacket(res.status, "{}");
+	json jsonData = {
+		{"status", res.status}
+	};
+	return buildPacket(res.status, jsonData.dump());
 }
 
 std::vector<char> JsonPacketSerializer::buildPacket(int code, std::string data)

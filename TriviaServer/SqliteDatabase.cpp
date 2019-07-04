@@ -75,7 +75,7 @@ void SqliteDatabase::sqlInsert(std::string table, std::vector<std::string> colum
 {
 
 	std::stringstream statementStream;
-	statementStream << "INSERT INTO " << table << " ";
+	statementStream << "INSERT INTO " << table << " (";
 
 	std::ostringstream columnStringStream, valueStringStream;
 	std::copy(columns.begin(), columns.end(), std::ostream_iterator<std::string>(columnStringStream, ","));
@@ -88,7 +88,8 @@ void SqliteDatabase::sqlInsert(std::string table, std::vector<std::string> colum
 
 	if (res != SQLITE_OK)
 	{
-		throw std::runtime_error("Failed to insert into database: '" + std::string(errMessage) + "'");
+		std::cerr << "Failed to insert into database: '" << errMessage << "'";
+		throw std::runtime_error("Failed to perform action due to database error");
 	}
 
 }

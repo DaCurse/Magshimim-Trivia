@@ -4,6 +4,7 @@
 #include "IRequestHandler.h"
 #include "Request.h"
 #include "Response.h"
+#include "JsonPacketDeserializer.h"
 #include "JsonPacketSerializer.h"
 #include "LoginManager.h"
 

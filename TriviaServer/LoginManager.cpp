@@ -1,6 +1,6 @@
 #include "LoginManager.h"
 
-
+std::vector<LoggedUser> LoginManager::loggedUsers = {};
 
 LoginManager::LoginManager(IDatabase* database) : m_database(database)
 {
@@ -23,7 +23,7 @@ void LoginManager::signup(std::string email, std::string username, std::string p
 	}
 
 	std::regex emailReg("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
-	if (std::regex_match(email, emailReg))
+	if (!std::regex_match(email, emailReg))
 	{
 		throw std::runtime_error("Email is invalid");
 	}
@@ -34,15 +34,17 @@ void LoginManager::signup(std::string email, std::string username, std::string p
 
 void LoginManager::login(std::string username, std::string password)
 {
-	m_loggedUsers.push_back(m_database->loginUser(username, password));
+	for(auto it = loggedUsers.begin(); it != loggedUsers.end(); ++it)
+	{
+		if (it->getUsername() == username)
+		{
+			throw std::runtime_error("User already logged in");
+		}
+	}
+	loggedUsers.push_back(m_database->loginUser(username, password));
 }
 
 void LoginManager::logout(std::string username)
 {
-	m_loggedUsers.erase(std::remove(m_loggedUsers.begin(), m_loggedUsers.end(), username), m_loggedUsers.end());
-}
-
-std::vector<LoggedUser> LoginManager::getLoggedUsers()
-{
-	return std::vector<LoggedUser>(m_loggedUsers);
+	loggedUsers.erase(std::remove(loggedUsers.begin(), loggedUsers.end(), username), loggedUsers.end());
 }

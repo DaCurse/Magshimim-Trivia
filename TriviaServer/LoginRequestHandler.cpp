@@ -16,7 +16,36 @@ const bool LoginRequestHandler::isRequestRelevant(Request r)
 
 const RequestResult LoginRequestHandler::handleRequest(Request r)
 {
-	return RequestResult();
+	try
+	{
+		if (r.id == LOGIN_REQUEST)
+		{
+			LoginRequest req = JsonPacketDeserializer::deserializeLoginRequest(r.buffer.data(), r.buffer.size());
+			m_loginManager.login(req.username, req.password);
+			LoginResponse res = { LOGIN_SUCCESS };
+			return { JsonPacketSerializer::serializeResponse(res), nullptr };
+		}
+		else if (r.id == SIGNUP_REQUEST)
+		{
+			SignupRequest req = JsonPacketDeserializer::deserializeSignupRequest(r.buffer.data(), r.buffer.size());
+			m_loginManager.signup(req.email, req.username, req.password);
+			SignupResponse res = { SIGNUP_SUCCESS };
+			return { JsonPacketSerializer::serializeResponse(res), m_handlerFactory->createLoginRequestHandler() };
+		}
+	}
+	catch(nlohmann::json::exception& e)
+	{
+		ErrorResponse res = { "Invalid json in request" };
+		return { JsonPacketSerializer::serializeResponse(res), nullptr };
+	}
+	catch (std::exception& e)
+	{
+		ErrorResponse res = { e.what() };
+		return {JsonPacketSerializer::serializeResponse(res), nullptr};
+	}
+
+	ErrorResponse res = { "Invalid request" };
+	return { JsonPacketSerializer::serializeResponse(res), nullptr };
 }
 
 RequestResult LoginRequestHandler::signup(Request r)

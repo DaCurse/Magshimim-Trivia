@@ -2,7 +2,6 @@
 
 Server::Server(IDatabase* database) : m_database(database), m_handlerFactory(database), m_communicator(m_handlerFactory)
 {
-
 }
 
 
