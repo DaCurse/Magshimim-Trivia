@@ -12,10 +12,10 @@
 #include <stdexcept>
 #include <ctime>
 #include <thread>
-#include <future>
 #include <mutex>
 #include <WinSock2.h>
 #include <Windows.h>
+#include <regex>
 
 
 // External libraries

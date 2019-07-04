@@ -15,3 +15,8 @@ std::string LoggedUser::getUsername()
 {
 	return m_username;
 }
+
+bool LoggedUser::operator==(std::string username)
+{
+	return m_username == username;
+}

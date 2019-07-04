@@ -1,11 +1,9 @@
 #include "LoginRequestHandler.h"
 #include "RequestHandlerFactory.h"
 
-
-LoginRequestHandler::LoginRequestHandler() : m_handlerFactory(nullptr)
+LoginRequestHandler::LoginRequestHandler(LoginManager manager, RequestHandlerFactory* factory) : m_loginManager(manager), m_handlerFactory(factory)
 {
 }
-
 
 LoginRequestHandler::~LoginRequestHandler()
 {

@@ -1,6 +1,6 @@
 #include "Communicator.h"
 
-Communicator::Communicator()
+Communicator::Communicator(RequestHandlerFactory factory) : m_factory(factory)
 {
 	WSADATA wsaData;
 
@@ -17,12 +17,20 @@ Communicator::Communicator()
 }
 
 
+
 Communicator::~Communicator()
 {
 	try
 	{
 		WSACleanup();
 		closesocket(m_sock);
+
+		std::lock_guard<std::mutex> locker(m_clientsMu);
+		for (auto it = m_clients.begin(); it != m_clients.end(); ++it)
+		{
+			delete[] it->second;
+		}
+
 	}
 	catch (...) {}
 }
@@ -56,15 +64,14 @@ void Communicator::bindAndListen()
 
 		std::cout << "Client connected" << std::endl;
 
-		m_clients[clientSock] = (IRequestHandler*)m_factory.createLoginRequestHandler();
+		{
+			std::lock_guard<std::mutex> locker(m_clientsMu);
+			m_clients[clientSock] = (IRequestHandler*)m_factory.createLoginRequestHandler();
+		}
 		startThreadForNewClient(clientSock);
 
 	}
 
-}
-
-void Communicator::handleRequests()
-{
 }
 
 void Communicator::clientHandler(SOCKET client)
@@ -124,6 +131,7 @@ void Communicator::clientHandler(SOCKET client)
 	{
 		closesocket(client);
 	}
+	closesocket(client);
 }
 
 void Communicator::startThreadForNewClient(SOCKET clientSock)

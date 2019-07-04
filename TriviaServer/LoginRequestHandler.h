@@ -12,7 +12,7 @@ class RequestHandlerFactory;
 class LoginRequestHandler : public IRequestHandler
 {
 	public:
-		LoginRequestHandler();
+		LoginRequestHandler(LoginManager manager, RequestHandlerFactory* factory);
 		~LoginRequestHandler();
 
 		virtual const bool isRequestRelevant(Request r);

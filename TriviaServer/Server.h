@@ -8,7 +8,7 @@
 class Server
 {
 	public:
-		Server();
+		Server(IDatabase* database);
 		~Server();
 
 		void run();

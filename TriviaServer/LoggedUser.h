@@ -9,6 +9,7 @@ class LoggedUser
 		~LoggedUser();
 
 		std::string getUsername();
+		bool operator ==(std::string username);
 
 	private:
 		std::string m_username;

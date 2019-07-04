@@ -10,11 +10,10 @@
 class Communicator
 {
 	public:
-		Communicator();
+		Communicator(RequestHandlerFactory factory);
 		~Communicator();
 
 		void bindAndListen();
-		void handleRequests();
 
 	private:
 		SOCKET m_sock;
