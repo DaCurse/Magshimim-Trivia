@@ -9,11 +9,15 @@ Communicator::Communicator(RequestHandlerFactory factory) : m_factory(factory)
 		throw std::runtime_error("Failed to startup WSA");
 	}
 
+	std::cout << "WSA Initialized" << std::endl;
+
 	m_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_sock == INVALID_SOCKET)
 	{
 		throw std::runtime_error("Failed to create socket");
 	}
+
+	std::cout << "Server socket ready" << std::endl;
 }
 
 
@@ -51,22 +55,30 @@ void Communicator::bindAndListen()
 		throw std::runtime_error("Failed to start listening");
 	}
 
+	std::cout << "Listening for connections on port " << Config::getConfig()["port"] << std::endl;
 	
 	while (true)
 	{
-		SOCKET clientSock = accept(m_sock, NULL, NULL);
-		
+		SOCKADDR_IN clientAddr;
+		size_t len = sizeof(clientAddr);
+		SOCKET clientSock = accept(m_sock, (SOCKADDR*)&clientAddr, (int*)&len);
+
+
 		if(clientSock == INVALID_SOCKET)
 		{ 
 			throw std::runtime_error("Invalid connection");
 		}
 
-		std::cout << "Client connected" << std::endl;
+		char addr[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &(clientAddr.sin_addr.s_addr), addr, INET_ADDRSTRLEN);
+
+		std::cout << "[" << addr << ", " << htons(clientAddr.sin_port) << "] " << "Client connected" << std::endl;
 
 		{
 			std::lock_guard<std::mutex> locker(m_clientsMu);
 			m_clients[clientSock] = (IRequestHandler*)m_factory.createLoginRequestHandler();
 		}
+
 		startThreadForNewClient(clientSock);
 
 	}
