@@ -1,6 +1,8 @@
 #pragma once
 
 #include "stdafx.h"
+#include "Room.h"
+#include "DatabaseModels.h"
 
 typedef enum ResponseID {
 	REQUEST_ERROR = 201,
@@ -24,30 +26,30 @@ typedef struct SignupResponse {
 
 typedef struct LogoutResponse {
 	ResponseID status;
-};
+} LogoutResponse;
 
 typedef struct GetRoomsResponse {
 	ResponseID status;
-	// vec
-};
+	std::vector<RoomData> rooms;
+} GetRoomsResponse;
 
 typedef struct GetPlayersInRoomResponse {
 	ResponseID status;
-	std::vector<std::string> rooms;
-};
+	std::vector<std::string> players;
+} GetPlayersInRoomResponse;
 
 typedef struct HighscoreResponse {
 	ResponseID status;
-	// vec
-};
+	std::vector<Highscore> highscores;
+} HighscoreResponse;
 
 typedef struct JoinRoomResponse {
 	ResponseID status;
-};
+} JoinRoomResponse;
 
 typedef struct CreateRoomResponse {
 	ResponseID status;
-};
+} CreateRoomResponse;
 
 typedef struct ErrorResponse {
 	std::string message;

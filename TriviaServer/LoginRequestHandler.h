@@ -23,7 +23,4 @@ class LoginRequestHandler : public IRequestHandler
 		LoginManager m_loginManager;
 		RequestHandlerFactory* m_handlerFactory;
 
-		RequestResult signup(Request r);
-		RequestResult login(Request r);
-
 };

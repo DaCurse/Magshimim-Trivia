@@ -23,9 +23,19 @@ SqliteDatabase::~SqliteDatabase()
 	m_db = nullptr;
 }
 
-const std::map<LoggedUser, int> SqliteDatabase::getHighscores()
+
+const std::vector<Highscore> SqliteDatabase::getHighscores()
 {
-	return std::map<LoggedUser, int>();
+	std::vector <std::map<std::string, std::string>> highscoresRaw = sqlFetch("players_answers", { "username", "COUNT(is_correct)" }, "is_correct = 1");
+	std::vector<Highscore> highscores;
+	for (auto it = highscoresRaw.begin(); it != highscoresRaw.end(); ++it)
+	{
+		for (auto it2 = it->begin(); it2 != it->end(); ++it2)
+		{
+			highscores.push_back({ it2->first, std::stoi(it2->second) });
+		}
+	}
+	return highscores;
 }
 
 const bool SqliteDatabase::doesUserExist(std::string username)
