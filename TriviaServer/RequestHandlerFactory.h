@@ -2,8 +2,11 @@
 
 #include "stdafx.h"
 #include "LoginManager.h"
+#include "RoomManager.h"
+#include "HighscoreTable.h"
 
 class LoginRequestHandler;
+class MenuRequestHandler;
 
 class RequestHandlerFactory
 {
@@ -12,8 +15,11 @@ class RequestHandlerFactory
 		~RequestHandlerFactory();
 
 		LoginRequestHandler* createLoginRequestHandler();
+		MenuRequestHandler* createMenuRequestHandler(std::string username);
 
 	private:
 		LoginManager m_loginManager;
+		RoomManager m_roomManager;
+		HighscoreTable m_highscoreTable;
 };
 

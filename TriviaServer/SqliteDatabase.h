@@ -12,7 +12,7 @@ class SqliteDatabase : public IDatabase
 		SqliteDatabase();
 		virtual ~SqliteDatabase();
 
-		virtual const std::map<LoggedUser, int> getHighscores();
+		virtual const std::vector<Highscore> getHighscores();
 		virtual const bool doesUserExist(std::string username);
 		virtual const std::list<Question> getQuestions(int id);
 		virtual const LoggedUser loginUser(std::string username, std::string password);

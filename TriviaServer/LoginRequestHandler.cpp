@@ -23,7 +23,7 @@ const RequestResult LoginRequestHandler::handleRequest(Request r)
 			LoginRequest req = JsonPacketDeserializer::deserializeLoginRequest(r.buffer.data(), r.buffer.size());
 			m_loginManager.login(req.username, req.password);
 			LoginResponse res = { LOGIN_SUCCESS };
-			return { JsonPacketSerializer::serializeResponse(res), nullptr };
+			return { JsonPacketSerializer::serializeResponse(res), (IRequestHandler*)m_handlerFactory->createMenuRequestHandler(req.username) };
 		}
 		else if (r.id == SIGNUP_REQUEST)
 		{
@@ -46,14 +46,4 @@ const RequestResult LoginRequestHandler::handleRequest(Request r)
 
 	ErrorResponse res = { "Invalid request" };
 	return { JsonPacketSerializer::serializeResponse(res), nullptr };
-}
-
-RequestResult LoginRequestHandler::signup(Request r)
-{
-	return RequestResult();
-}
-
-RequestResult LoginRequestHandler::login(Request r)
-{
-	return RequestResult();
 }

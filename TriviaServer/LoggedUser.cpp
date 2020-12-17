@@ -20,3 +20,8 @@ bool LoggedUser::operator==(std::string username)
 {
 	return m_username == username;
 }
+
+bool LoggedUser::operator==(LoggedUser other)
+{
+	return m_username == other.getUsername();
+}

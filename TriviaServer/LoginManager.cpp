@@ -46,5 +46,18 @@ void LoginManager::login(std::string username, std::string password)
 
 void LoginManager::logout(std::string username)
 {
-	loggedUsers.erase(std::remove(loggedUsers.begin(), loggedUsers.end(), username), loggedUsers.end());
+	auto it = loggedUsers.begin();
+	for (; it != loggedUsers.end(); it++)
+	{
+		if (*it == username)
+		{
+			break;
+		}
+	}
+	loggedUsers.erase(it);
+}
+
+std::vector<LoggedUser> LoginManager::getUsers()
+{
+	return std::vector<LoggedUser>(loggedUsers);
 }

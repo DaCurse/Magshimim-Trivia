@@ -24,6 +24,79 @@ std::vector<char> JsonPacketSerializer::serializeResponse(SignupResponse res)
 	return buildPacket(res.status, jsonData.dump());
 }
 
+std::vector<char> JsonPacketSerializer::serializeResponse(LogoutResponse res)
+{
+	json jsonData = {
+		{"status", res.status}
+	};
+	return buildPacket(res.status, jsonData.dump());
+}
+
+std::vector<char> JsonPacketSerializer::serializeResponse(GetRoomsResponse res)
+{
+	json jsonData = {
+		{"status", res.status},
+		{"rooms", {}}
+	};
+
+	for (auto it = res.rooms.begin(); it != res.rooms.end(); ++it)
+	{
+		jsonData["rooms"].push_back({
+			{"id", it->id},
+			{"name", it->name},
+			{"maxPlayers", it->maxPlayers},
+			{"timePerQuestion", it->timePerQuestion},
+			{"isActive", it->isActive},
+
+		});
+	}
+
+	return buildPacket(res.status, jsonData.dump());
+}
+
+std::vector<char> JsonPacketSerializer::serializeResponse(GetPlayersInRoomResponse res)
+{
+	json jsonData = {
+		{"status", res.status},
+		{"players", res.players}
+	}; 
+	return buildPacket(res.status, jsonData.dump());
+}
+
+std::vector<char> JsonPacketSerializer::serializeResponse(HighscoreResponse res)
+{
+	json jsonData = {
+		{"status", res.status},
+		{"highscores", {}}
+	}; 
+	
+	for (auto it = res.highscores.begin(); it != res.highscores.end(); ++it)
+	{
+		jsonData["highscores"].push_back({
+			{"username", it->username},
+			{"score", it->score}
+		});
+	}
+
+	return buildPacket(res.status, jsonData.dump());
+}
+
+std::vector<char> JsonPacketSerializer::serializeResponse(JoinRoomResponse res)
+{
+	json jsonData = {
+		{"status", res.status}
+	};
+	return std::vector<char>();
+}
+
+std::vector<char> JsonPacketSerializer::serializeResponse(CreateRoomResponse res)
+{
+	json jsonData = {
+		{"status", res.status}
+	};
+	return buildPacket(res.status, jsonData.dump());
+}
+
 std::vector<char> JsonPacketSerializer::buildPacket(int code, std::string data)
 {
 	std::vector<char> packetBytes;

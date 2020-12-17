@@ -16,3 +16,8 @@ typedef struct User {
 	std::string email;
 	std::string password;
 } User;
+
+typedef struct Highscore {
+	std::string username;
+	int score;
+} Highscore;
